@@ -37,6 +37,18 @@ function getSlideWithMoreCommonTags(slides, slide) {
     return bestFound.tags ? slides[bestFound.index] : null;
 }
 
+getPhotoWithLessCommonTags(photos, photo, maxTags) {
+    let best = { photo: null, tags: maxTags }
+    for (let ph of photo) {
+        const tags = tags_in_common(photo, ph);
+        if (tags < best.tags) {
+            best = { photo: ph, tags };
+            if (!tags) { continue; }
+        }
+    }
+    return best.photo;
+}
+
 function initSession(filePath) {
   const content = fs.readFileSync(filePath, 'utf8').split('\r\n');
   return content.slice(1, -1).map((value, index) => {
