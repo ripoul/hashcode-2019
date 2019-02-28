@@ -2,27 +2,39 @@ const fs = require('fs');
 const {Photo, Slide} = require('./classes');
 
 function main() {
-    const files = [
-        './subject/a_example.txt',
-        './subject/b_lovely_landscapes.txt',
-        './subject/c_memorable_moments.txt',
-        './subject/d_pet_pictures.txt',
-        './subject/e_shiny_selfies.txt',
-    ];
-    const photo = initSession(files[0]);
+  const files = [
+    './subject/a_example.txt',
+    './subject/b_lovely_landscapes.txt',
+    './subject/c_memorable_moments.txt',
+    './subject/d_pet_pictures.txt',
+    './subject/e_shiny_selfies.txt',
+  ];
+  const photo = initSession(files[0]);
 }
 
 function tags_in_common(slide1, slide2) {
-    intersec = slide1.tags.filter(value => -1 !== slide2.tags.indexOf(value));
-    return intersec.length
+  const intersec =
+      slide1.tags.filter(value => -1 !== slide2.tags.indexOf(value));
+  return intersec.length
 }
 
 function have_tags_in_common(slide1, slide2) {
-    return tags_in_common(slide1, slide2) > 0
+  return tags_in_common(slide1, slide2) > 0
 }
 
 function find_slide_with_hashtag_in_common(slides, slide) {
     return slides.filter(s => have_tags_in_common(s, slide));
+}
+
+function getSlideWithMoreCommonTags(slides, slide) {
+    let bestFound = {index: 0, tags: 0}
+    slides.map((value, index) => {
+        const tags = tags_in_common(slide, value);
+        if (bestFound.tags < tags) {
+            bestFound = {index, tags};
+        }
+    });
+    return bestFound.tags ? slides[bestFound.index] : null;
 }
 
 function initSession(filePath) {
