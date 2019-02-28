@@ -1,0 +1,20 @@
+{
+  "name": "hashcode-2019",
+  "version": "1.0.0",
+  "description": "El Drouis",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "main": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ripoul/hashcode-2019.git"
+  },
+  "author": "@ripoul",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ripoul/hashcode-2019/issues"
+  },
+  "homepage": "https://github.com/ripoul/hashcode-2019#readme"
+}
