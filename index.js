@@ -33,4 +33,18 @@ function initSession(filePath) {
   });
 }
 
+function return_comme_c_attendu(slides) {
+    let toWrite = ""
+    toWrite += slides.length +"\n"
+    slides.forEach(slide => {
+        let line = "";
+        slide.photoIds.forEach(id => {
+            line += id + " ";
+        });
+        line+="\n"
+        toWrite += line;
+    });
+    fs.writeFile("retFile.txt", toWrite);
+}
+
 main();
