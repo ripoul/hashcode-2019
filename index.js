@@ -71,4 +71,42 @@ function return_comme_c_attendu(slides) {
     fs.writeFile("retFile.txt", toWrite);
 }
 
+function createSlide() {
+	var horizontal = [];
+	var vertical = [];
+	var slide = [];
+	var used = [];
+	var max = 0;
+
+	//sépare vertical et horizontal
+	photos.forEach(element => {
+		if(element.tag.length > max) {
+			max = element.tag.length;
+		}
+		if(element.orientation == 'H') {
+			horizontal.push(element);
+		} else {
+			vertical.push(element);
+		}
+	});
+	
+	//ajoute photo h à sortie
+	horizontal.forEach(element => {
+		slide.push(new Slide([element.id], [element.tags]));
+	});
+
+	//ajoute photo v à la sortie
+	vertical.map((photo) => {
+		if(!used.includes(photo)) {
+			
+			var bestPhoto = getPhotoWithLessCommonTags(vertical, photo, max);
+			
+			slide.push(new Slide([photo.id, bestPhoto.id], new Set([photo.tags, bestPhoto.tags])));
+
+			used.push(bestPhoto);
+		}
+	});
+	return slide;
+}
+
 main();
