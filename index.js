@@ -9,9 +9,39 @@ function main() {
     './subject/d_pet_pictures.txt',
     './subject/e_shiny_selfies.txt',
   ];
-  const photos = initSession(files[0]);
-  const slides = createSlide(photos);
-  
+  const prefixes = ['a', 'b', 'c', 'd', 'e'];
+  files.forEach((file, index) => {
+    const photos = initSession(file);
+    const slides = createSlide(photos);
+    const slideShow = constructSlideShow(slides);
+    return_comme_c_attendu(slideShow, prefixes[index]);
+  });
+}
+
+function constructSlideShow(slides) {
+  const slideShow = [];
+  let slicedArray = slideShow;
+  for (slide of slides) {
+    if (slideShow.includes(slide)) {
+      continue;
+    }
+    slicedArray = slicedArray.slice(1);
+    const withCommonTags =
+        find_slide_with_hashtag_in_common(slicedArray, slide);
+
+    if (!withCommonTags) {
+      continue;
+    }
+    const moreCommonTags = getSlideWithMoreCommonTags(slicedArray, slide);
+    slideShow.push(slide);
+    if (moreCommonTags) {
+      slideShow.push(
+          moreCommonTags.tags.length > slicedArray[0].tags.length ?
+              moreCommonTags :
+              slicedArray[0]);
+    }
+  }
+  return slideShow;
 }
 
 function tags_in_common(slide1, slide2) {
@@ -36,7 +66,7 @@ function getSlideWithMoreCommonTags(slides, slide) {
       bestFound = {index, tags};
     }
   });
-  return bestFound.tags ? slides[bestFound.index] : null;
+  return slides[bestFound.index];
 }
 
 function getPhotoWithLessCommonTags(photos, photo, maxTags) {
@@ -61,18 +91,23 @@ function initSession(filePath) {
   });
 }
 
-function return_comme_c_attendu(slides) {
+function return_comme_c_attendu(slides, prefix) {
   let toWrite = ''
   toWrite += slides.length + '\n'
+  // console.log(slides);
+  // console.log(slides.reduce((acc, val) => val.photoIds.join(' ') + '\n'));
   slides.forEach(slide => {
     let line = '';
-    slide.photoIds.forEach(id => {
-      line += id + ' ';
+    slide.photoIds.forEach((id, index) => {
+      if (index) {
+        line += ' ';
+      }
+      line += id;
     });
     line += '\n'
     toWrite += line;
   });
-  fs.writeFile('retFile.txt', toWrite);
+  fs.writeFile(`${prefix}_output.txt`, toWrite);
 }
 
 function createSlide(photos) {
@@ -96,7 +131,7 @@ function createSlide(photos) {
 
   // ajoute photo h à sortie
   horizontal.forEach(element => {
-    slide.push(new Slide([element.id], [element.tags]));
+    slide.push(new Slide([element.id], element.tags));
   });
 
   // ajoute photo v à la sortie
