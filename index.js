@@ -18,7 +18,7 @@ function tags_in_common(slide1, slide2) {
 }
 
 function have_tags_in_common(slide1, slide2) {
-    return tags_in_common > 0
+    return tags_in_common(slide1, slide2) > 0
 }
 
 function find_slide_with_hashtag_in_common(slides, slide) {
