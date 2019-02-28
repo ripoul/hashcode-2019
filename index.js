@@ -1,3 +1,4 @@
+const fs = require('fs');
 const {Photo, Slide} = require('./classes');
 
 function main() {
@@ -8,6 +9,7 @@ function main() {
         './subject/d_pet_pictures.txt',
         './subject/e_shiny_selfies.txt',
     ];
+    const photo = initSession(files[0]);
 }
 
 function tags_in_common(slide1, slide2) {
@@ -28,3 +30,13 @@ function find_slide_with_hashtag_in_common(slides, slide) {
     });
     return ret;
 }
+
+function initSession(filePath) {
+  const content = fs.readFileSync(filePath, 'utf8').split('\r\n');
+  return content.slice(1, -1).map((value, index) => {
+    const splitedValue = value.split(' ');
+    return new Photo(index, splitedValue[0], splitedValue.slice(2));
+  });
+}
+
+main();
