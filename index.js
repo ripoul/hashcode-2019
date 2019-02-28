@@ -22,13 +22,7 @@ function have_tags_in_common(slide1, slide2) {
 }
 
 function find_slide_with_hashtag_in_common(slides, slide) {
-    ret = Array();
-    slides.forEach(s => {
-        if (have_tags_in_common(s, slide)) {
-            ret.push(slide)
-        }
-    });
-    return ret;
+    return slides.filter(s => have_tags_in_common(s, slide));
 }
 
 function initSession(filePath) {
